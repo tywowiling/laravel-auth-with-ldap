@@ -11,5 +11,7 @@ class User extends Model
      *
      * @var array
      */
-    public static $objectClasses = [];
+    public static $objectClasses = [
+        'uid'
+    ];
 }

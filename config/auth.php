@@ -62,13 +62,19 @@ return [
     'providers' => [
         'ldap' => [
             'driver' => 'ldap',
-            'model' => LdapRecord\Models\OpenLDAP\User::class,
+            'model' => LdapRecord\Models\ActiveDirectory\User::class,
             'database' => [
                 'model' => App\Models\User::class,
                 'sync_passwords' => false,
                 'sync_attributes' => [
-                    'name' => 'cn',
+                    'name' => 'name',
                     'email' => 'mail',
+                    'username' => 'sAMAccountName',
+                ],
+                'sync_existing' => [
+                    // 'name' => 'cn',
+                    // 'email' => 'mail',
+                    'username' => 'uid',
                 ],
             ],
         ],

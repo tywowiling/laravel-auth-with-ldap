@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\LdapUserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,6 +17,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('ldap-user', [LdapUserController::class, 'index']);
 
 Auth::routes();
 

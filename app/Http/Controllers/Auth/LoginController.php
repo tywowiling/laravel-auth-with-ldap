@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
@@ -42,14 +43,67 @@ class LoginController extends Controller
 
     protected function credentials(Request $request)
     {
+        $uname = $request->username;
+        $user = User::where('username', '=', $uname)
+                ->first();
+
+        if($user){
+            if($user['guid'] != NULL){
+                return [
+                    'sAMAccountName' => $request->username,
+                    'password' => $request->password,
+                ];
+            } else {
+                return [
+                    'sAMAccountName' => $request->username,
+                    'password' => $request->password,
+                    'fallback' => [
+                        'username' => $request->username,
+                        'password' => $request->password,
+                    ],
+                ];
+            }   
+        }
+
         return [
-            'uid' => $request->get('username'),
-            'password' => $request->get('password'),
+            'u' => $request->username,
+            'password' => $request->password,
         ];
+        
+        // if($user){
+        //     return [
+        //         'uid' => $request->username,
+        //         'password' => $request->password,
+        //         'fallback' => [
+        //             'username' => $request->username,
+        //             'password' => $request->password,
+        //         ],
+        //     ];
+        // }
+
+        // return [
+        //     'sAMAccountName' => $request->username,
+        //     'password' => $request->password,
+        // ];
+
+        // return [
+        //     'uid' => $request->username,
+        //     'password' => $request->password,
+        // ];
     }
 
     public function username()
     {
         return 'username';
     }
+// LDAP_LOGGING=true
+// LDAP_CONNECTION=default
+// LDAP_HOST=ldap.forumsys.com
+// LDAP_USERNAME=null
+// LDAP_PASSWORD=null
+// LDAP_PORT=389
+// LDAP_BASE_DN="dc=example,dc=com"
+// LDAP_TIMEOUT=5
+// LDAP_SSL=false
+// LDAP_TLS=false
 }
